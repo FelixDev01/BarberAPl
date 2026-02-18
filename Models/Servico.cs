@@ -19,7 +19,7 @@ namespace BarberAPI.Models
         public int DuracaoMin { get; set; }
 
         [Range(0.01, 999.00, ErrorMessage = "O preço deve ficar entre 0.01 até 999.00.")]
-        public decimal Preco { get; set; }
+        public double Preco { get; set; }
     }
 
 }
