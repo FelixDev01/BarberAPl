@@ -3,6 +3,7 @@ using BarberAPI.DTO;
 using BarberAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarberAPI.Controllers
 {
@@ -20,6 +21,7 @@ namespace BarberAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetClientes()
         {
+            var clientes = await _dbContext.Clientes.ToListAsync();
             return Ok();
         }
 
