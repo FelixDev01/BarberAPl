@@ -3,23 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BarberAPI.Models
 {
-    public class Servico
+    public class Agendamento
     {
         [Key]
-        public int Id { get; set; }
+        public int AgendamentoID { get; set; }
 
-        [Required(ErrorMessage = "O nome do serviço é obrigatório.")]
-        [Display(Name = "Nome do Serviço")]
-        public string NomeServico { get; set; }
+        [Required]
+        public DateTime DataHora { get; set; }
+        
+        public string Observacoes { get; set; }
 
-        [Display(Name = "Descrição")]
-        public string Descricao { get; set; }
+        [Required]
+        public int Status { get; set; }
 
-        [Range(10, 999, ErrorMessage = "A duração mínima deve ser de 10 minutos até 999 minutos.")]
-        public int DuracaoMin { get; set; }
+        [Required]
+        public int ClienteID { get; set; }
 
-        [Range(0.01, 999.00, ErrorMessage = "O preço deve ficar entre 0.01 até 999.00.")]
-        public decimal Preco { get; set; }
+        [ForeignKey("ClienteID")]
+        public Cliente Cliente { get; set; }
+
+        public virtual ICollection<Servico> Servicos { get; set; }
     }
 
 }
