@@ -20,9 +20,9 @@ namespace BarberAPI.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> CriarClientes([FromBody] ClienteDTO clienteDTO)
+        public async Task<IActionResult> CriarClientes(ClienteDTO clienteDTO)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //NÃO É NECESSARIO ESTA VERIFICAÇÃO, POIS O [ApiController] JÁ TRATA ISSO AUTOMATICAMENTE, MAS DEIXEI PARA FINS DIDATICOS
             {
                 Cliente cliente = new Cliente();
                 cliente.Nome = clienteDTO.Nome;
@@ -32,6 +32,7 @@ namespace BarberAPI.Controllers
 
                 _dbContext.Clientes.Add(cliente);
                 await _dbContext.SaveChangesAsync();
+
                 return CreatedAtAction(nameof(GetClientesPorId),new { id = cliente.ClienteId }, cliente);
             }
             return BadRequest();
@@ -52,33 +53,36 @@ namespace BarberAPI.Controllers
             {
                 return NotFound();
             }
+
             return Ok(cliente);
         }
 
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> AtualizarCliente(int id, [FromBody] ClienteDTO clienteDTO)
+        public async Task<IActionResult> AtualizarCliente(int id, ClienteDTO clienteDTO)
         {
-            if(id != clienteDTO.ClienteId)
+            if( id != clienteDTO.ClienteId )
             {
                 return BadRequest();
             }
        
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //NÃO É NECESSARIO ESTA VERIFICAÇÃO, POIS O [ApiController] JÁ TRATA ISSO AUTOMATICAMENTE, MAS DEIXEI PARA FINS DIDATICOS
             {
-                var clienteExistente = await _dbContext.Clientes.FindAsync(clienteDTO.ClienteId);
+                var clienteExistente = await _dbContext.Clientes.FindAsync(id);
+
                 if (clienteExistente == null)
                 {
                     return NotFound();
                 }
+
                 clienteExistente.Nome = clienteDTO.Nome;
                 clienteExistente.Telefone = clienteDTO.Telefone;
                 clienteExistente.Email = clienteDTO.Email;
                 clienteExistente.DataNascimento = clienteDTO.DataNascimento;
-                _dbContext.Clientes.Update(clienteExistente);
                 await _dbContext.SaveChangesAsync();
                 return Ok(clienteExistente);
             }
+
             return BadRequest();
         }
 
@@ -92,6 +96,7 @@ namespace BarberAPI.Controllers
             }
             _dbContext.Clientes.Remove(cliente);
             await _dbContext.SaveChangesAsync();
+
             return NoContent();
         }
 
